@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js HTML to PDF API
 
-## Getting Started
+A Next.js application that provides an internal PDF generation API using Puppeteer, designed to replace external PDF generation services.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- **PDF Generation API**: Convert HTML to PDF using Puppeteer  
+- **RESTful Endpoint**: `POST /api/pdf` with JSON body containing HTML  
+- **Binary Response**: Returns PDF as `application/pdf` binary stream  
+- **Error Handling**: Comprehensive error handling and validation  
+- **Test Interface**: Built-in test page for API demonstration  
+
+---
+
+## 📦 Installation
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+## 📡 API Usage
+
+### Endpoint
+
+```http
+POST /api/pdf
+```
+
+### Request Format
+
+```json
+{
+  "html": "<html><body><h1>Hello World</h1></body></html>"
+}
+```
+
+### Response
+
+- **Success**: PDF binary stream with `Content-Type: application/pdf`
+- **Failure**: JSON error object with status code and message
+
+---
+
+### 🧪 Example Usage (Node.js)
+
+```javascript
+const response = await fetch("http://localhost:3000/api/pdf", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ html: htmlContent }),
+});
+
+if (response.headers.get("Content-Type") !== "application/pdf") {
+  const data = await response.json();
+  console.error("PDF generation error:", data);
+  throw new Error("Could not generate PDF.");
+}
+
+const pdfArrayBuffer = await response.arrayBuffer();
+return pdfArrayBuffer;
+```
+
+---
+
+## 🛠 Development
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🧱 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/app/
+├── api/
+│   └── pdf/
+│       └── route.js          # PDF generation API endpoint
+├── html-to-pdf/
+│   └── page.js               # Test interface for PDF generation
+└── page.js                   # Main page with link to test
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ⚙️ API Implementation Highlights
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Input Validation**: Ensures HTML is provided and is a valid string  
+2. **Puppeteer Configuration**: Headless and secure, with optimized flags  
+3. **PDF Options**: A4 page, custom margins, background graphics enabled  
+4. **Error Handling**: Graceful failure with proper browser cleanup  
+5. **Content-Type Validation**: Ensures returned file is a valid PDF  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## ❗ Error Codes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Code | Description                                 |
+|------|---------------------------------------------|
+| 400  | Invalid input (missing or malformed HTML)   |
+| 405  | Method not allowed (only POST supported)    |
+| 500  | Internal server error (Puppeteer failure)   |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧪 Testing Interface
+
+A simple test page is included at `/html-to-pdf` where you can:
+
+- Enter custom HTML  
+- Generate and preview PDFs  
+- Download the output  
+- View error messages if generation fails  
