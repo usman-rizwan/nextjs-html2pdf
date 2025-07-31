@@ -1,4 +1,4 @@
-import { options, puppeteer } from "@/helper";
+import { getOptions, puppeteer } from "@/helper";
 
 export async function POST(request) {
   try {
@@ -22,6 +22,7 @@ export async function POST(request) {
     }
 
     // Launch Puppeteer browser
+    const options = await getOptions();
     const browser = await puppeteer.launch(options);
 
     try {
