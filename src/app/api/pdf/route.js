@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import { options, puppeteer } from "@/helper";
 
 export async function POST(request) {
   try {
@@ -22,18 +22,7 @@ export async function POST(request) {
     }
 
     // Launch Puppeteer browser
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu",
-      ],
-    });
+    const browser = await puppeteer.launch(options);
 
     try {
       const page = await browser.newPage();
