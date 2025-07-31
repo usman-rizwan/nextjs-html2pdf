@@ -50,7 +50,7 @@ POST /api/pdf
 ### 🧪 Example Usage (Node.js)
 
 ```javascript
-const response = await fetch("http://localhost:3000/api/pdf", {
+const response = await fetch("https://nextjs-html2pdf.vercel.app/api/pdf", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ html: htmlContent }),
